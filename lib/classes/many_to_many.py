@@ -59,18 +59,35 @@ class Author:
         return list(set(article.magazine.category for article in self._articles))
 
 class Magazine:
+    all_magazines = []
+
     def __init__(self, name, category):
+        if not isinstance(name, str) or len(name) < 2 or len(name) > 16:
+            raise ValueError("Name must be a string between 2 and 16 characters.")
         self.name = name
         self.category = category
+        self._articles = []
+
+        Magazine.all_magazines.append(self)
 
     def articles(self):
-        pass
+        return self._articles
 
     def contributors(self):
-        pass
+        return list(set(article.author for article in self._articles))
 
     def article_titles(self):
-        pass
+        if not self._articles:
+            return None
+        return {article.title for article in self._articles}
 
     def contributing_authors(self):
-        pass
+        authors = [article.author for article in self._articles]
+        author_counts = {author: authors.count(author) for author in set(authors)}
+        return {author for author, count in author_counts.items() if count > 2}
+    
+    @classmethod
+    def top_publishers(cls):
+        if not cls.all_magazines:
+            return None
+        return max(cls.all_magazines, key=lambda magazine: len(magazine.articles))
