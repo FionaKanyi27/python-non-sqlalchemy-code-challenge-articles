@@ -1,20 +1,3 @@
-
-class Article:
-    all = []
-
-    def __init__(self, author, magazine, title):
-        if not (isinstance(title, str) and 5 <= len(title) <= 50):
-            raise ValueError("Title must be a string between 5 and 50 characters")
-
-        self._title = title
-        self.author = author
-        self.magazine = magazine
-        Article.all.append(self)
-
-    @property
-    def title(self):
-        return self._title
-        
 class Author:
     def __init__(self, name):
         self._name = name
@@ -76,3 +59,45 @@ class Magazine:
         author_counts = Counter(article.author for article in self.articles())
         result = [author for author, count in author_counts.items() if count > 2]
         return result if result else None
+
+
+class Article:
+    all = []
+
+    def __init__(self, author, magazine, title):
+        if not (isinstance(title, str) and 5 <= len(title) <= 50):
+            raise ValueError("Title must be a string between 5 and 50 characters")
+
+        self._title = title
+        self.author = author
+        self.magazine = magazine
+        Article.all.append(self)
+
+    @property
+    def title(self):
+        return self._title
+
+class Article:
+    all = []
+
+    def __init__(self, author, magazine, title):
+        if not (isinstance(title, str) and 5 <= len(title) <= 50):
+            raise ValueError("Title must be a string between 5 and 50 characters")
+        if not isinstance(author, Author):
+            raise ValueError("Author must be an instance of the Author class")
+        if not isinstance(magazine, Magazine):
+            raise ValueError("Magazine must be an instance of the Magazine class")
+        self._title = title
+        self.author = author
+        self.magazine = magazine
+        Article.all.append(self)
+
+    @property
+    def title(self):
+        return self._title
+
+    @title.setter
+    def title(self, value):
+        if not isinstance(value, str) or not (5 <= len(value) <= 50):
+            raise ValueError("Title must be a string between 5 and 50 characters")
+        self._title = value
